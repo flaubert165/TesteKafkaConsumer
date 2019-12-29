@@ -12,11 +12,6 @@ namespace TesteKafkaConsumer
             { 
                 GroupId = "test-consumer-group",
                 BootstrapServers = "localhost:31090",
-                // Note: The AutoOffsetReset property determines the start offset in the event
-                // there are not yet any committed offsets for the consumer group for the
-                // topic/partitions of interest. By default, offsets are committed
-                // automatically, so in this example, consumption will only start from the
-                // earliest message in the topic 'my-topic' the first time you run the program.
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -49,7 +44,6 @@ namespace TesteKafkaConsumer
                 }
                 catch (OperationCanceledException)
                 {
-                    // Ensure the consumer leaves the group cleanly and final offsets are committed.
                     c.Close();
                 }
             }
