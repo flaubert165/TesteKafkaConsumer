@@ -1,0 +1,54 @@
+# Standard VS.NET and ReSharper Foo
+src/*/obj
+src/*/bin
+*.csproj.user
+_ReSharper*/
+*ReSharper.*
+*.resharper.user
+*.resharper
+*.suo
+*.cache
+* Thumbs.db
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+[Tt]est[Rr]esult*
+.vs/
+packages/
+*.suo
+/.axoCover
+
+
+#Nuget packages folder
+packages/
+#Image temp folder
+
+/lib/clear/*
+/build
+*.DotSettings.user
+buildscripts/TestResult.xml
+
+
+
+
+

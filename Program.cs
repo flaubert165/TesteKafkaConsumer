@@ -4,36 +4,32 @@ using System.Threading;
 
 namespace TesteKafkaConsumer
 {
-    class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine($"Initializing");
+
             var conf = new ConsumerConfig
             { 
                 GroupId = "test-consumer-group",
-                BootstrapServers = "localhost:31090",
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                BootstrapServers = "dkafka-yield01:9092",
+                AutoOffsetReset = AutoOffsetReset.Latest,
+                EnableAutoCommit = false,
+                AutoCommitIntervalMs = 0
             };
 
             using (var c = new ConsumerBuilder<Ignore, string>(conf).Build())
             {
-                c.Subscribe("bar");
-
-                CancellationTokenSource cts = new CancellationTokenSource();
-                Console.CancelKeyPress += (_, e) => {
-                    e.Cancel = true; // prevent the process from terminating.
-                    cts.Cancel();
-                };
+                c.Subscribe("mkt-data-topic");
 
                 try
                 {
                     while (true)
                     {
-                        Console.WriteLine(DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss.fff tt"));
-                        
                         try
                         {
-                            var cr = c.Consume(cts.Token);
+                            var cr = c.Consume();
                             Console.WriteLine($"Consumed message '{cr.Value}'.");
                         }
                         catch (ConsumeException e)
