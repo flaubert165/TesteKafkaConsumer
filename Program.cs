@@ -1,6 +1,5 @@
-﻿using System;
-using Confluent.Kafka;
-using System.Threading;
+﻿using Confluent.Kafka;
+using System;
 
 namespace TesteKafkaConsumer
 {
@@ -8,11 +7,13 @@ namespace TesteKafkaConsumer
     {
         public static void Main(string[] args)
         {
+            var groupId = Guid.NewGuid().ToString();
+
             Console.WriteLine($"Initializing");
 
             var conf = new ConsumerConfig
             { 
-                GroupId = "test-consumer-group",
+                GroupId = "test-consumer-group-" + groupId,
                 BootstrapServers = "dkafka-yield01:9092",
                 AutoOffsetReset = AutoOffsetReset.Latest,
                 EnableAutoCommit = false,
@@ -30,7 +31,8 @@ namespace TesteKafkaConsumer
                         try
                         {
                             var cr = c.Consume();
-                            Console.WriteLine($"Consumed message '{cr.Value}'.");
+
+                            Console.WriteLine($"Consumed message '{cr.Value + " - delivered - " + DateTime.Now.Millisecond.ToString()}'.");
                         }
                         catch (ConsumeException e)
                         {
