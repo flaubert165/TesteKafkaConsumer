@@ -1,12 +1,31 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TesteKafkaConsumer
 {
     public class Program
     {
+        private const string InstrumentInfoTopic = "mkt-data-topic-instrument";
+        private const string QuotesInfoTopic = "mkt-data-topic-quote";
+        private const string QuotesInfoTopicSpecifc = "mkt-data-topic-quote-";
+        private const string BookInfoTopic = "mkt-data-topic-book";
+
         public static void Main(string[] args)
         {
+            IEnumerable<string> assets = new string[] { "PETR4", "VALE3", "ITUB4", "GGBR4", "SANB11", "MGLU3", "CAML3", "BIDI4", "BBDC4", "BOVA11", "BPAC11", "ITSA3", "WINZ17" };
+            string[] topics = new string[assets.Count()];
+            int i = 0;
+
+            foreach (var item in assets)
+            {
+                topics[i] = QuotesInfoTopicSpecifc + item;
+                i++;
+            }
+                    
+
+
             var groupId = Guid.NewGuid().ToString();
 
             Console.WriteLine($"Initializing");
@@ -14,7 +33,7 @@ namespace TesteKafkaConsumer
             var conf = new ConsumerConfig
             { 
                 GroupId = "test-consumer-group-" + groupId,
-                BootstrapServers = "dkafka-yield01:9092",
+                //BootstrapServers = "localhost:9092",
                 AutoOffsetReset = AutoOffsetReset.Latest,
                 EnableAutoCommit = false,
                 AutoCommitIntervalMs = 0
@@ -22,7 +41,9 @@ namespace TesteKafkaConsumer
 
             using (var c = new ConsumerBuilder<Ignore, string>(conf).Build())
             {
-                c.Subscribe("mkt-data-topic");
+                c.Subscribe(topics);
+
+                var teste = c.Subscription;
 
                 try
                 {
